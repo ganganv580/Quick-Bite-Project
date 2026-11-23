@@ -1,0 +1,36 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Backend API (debug)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/src/server.js",
+      "cwd": "${workspaceFolder}/backend",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "ML service (debug)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/ml-service/app.py",
+      "cwd": "${workspaceFolder}/ml-service",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Frontend (Vite)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}/frontend"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "QuickBite: all services",
+      "configurations": ["ML service (debug)", "Backend API (debug)", "Frontend (Vite)"],
+      "stopAll": true
+    }
+  ]
+}
+
