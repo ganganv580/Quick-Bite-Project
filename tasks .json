@@ -1,0 +1,117 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Install: backend",
+      "type": "shell",
+      "command": "npm install",
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Install: frontend",
+      "type": "shell",
+      "command": "npm install",
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Install: ML service",
+      "type": "shell",
+      "command": "python -m pip install -r requirements.txt",
+      "linux": { "command": "python3 -m pip install -r requirements.txt" },
+      "osx": { "command": "python3 -m pip install -r requirements.txt" },
+      "options": { "cwd": "${workspaceFolder}/ml-service" },
+      "problemMatcher": []
+    },
+    {
+      "label": "QuickBite: Install everything",
+      "dependsOn": ["Install: backend", "Install: frontend", "Install: ML service"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run: backend API",
+      "type": "shell",
+      "command": "npm run dev",
+      "isBackground": true,
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "problemMatcher": {
+        "pattern": { "regexp": "^__never_matches__$" },
+        "background": { "activeOnStart": true, "beginsPattern": "^\\[nodemon\\] starting", "endsPattern": "QuickBite API" }
+      }
+    },
+    {
+      "label": "Run: ML service",
+      "type": "shell",
+      "command": "python app.py",
+      "linux": { "command": "python3 app.py" },
+      "osx": { "command": "python3 app.py" },
+      "isBackground": true,
+      "options": { "cwd": "${workspaceFolder}/ml-service" },
+      "problemMatcher": {
+        "pattern": { "regexp": "^__never_matches__$" },
+        "background": { "activeOnStart": true, "beginsPattern": "^.*$", "endsPattern": "Running on" }
+      }
+    },
+    {
+      "label": "Run: frontend",
+      "type": "shell",
+      "command": "npm run dev",
+      "isBackground": true,
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "problemMatcher": {
+        "pattern": { "regexp": "^__never_matches__$" },
+        "background": { "activeOnStart": true, "beginsPattern": "^.*$", "endsPattern": "Local:" }
+      }
+    },
+    {
+      "label": "QuickBite: Start everything",
+      "dependsOn": ["Run: ML service", "Run: backend API", "Run: frontend"],
+      "dependsOrder": "parallel",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true }
+    },
+    {
+      "label": "Test: backend (Jest)",
+      "type": "shell",
+      "command": "npm test",
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Test: frontend (Vitest)",
+      "type": "shell",
+      "command": "npm test",
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Test: ML service (pytest)",
+      "type": "shell",
+      "command": "python -m pytest -v",
+      "linux": { "command": "python3 -m pytest -v" },
+      "osx": { "command": "python3 -m pytest -v" },
+      "options": { "cwd": "${workspaceFolder}/ml-service" },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "QuickBite: Run all unit tests",
+      "dependsOn": ["Test: backend (Jest)", "Test: frontend (Vitest)", "Test: ML service (pytest)"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
+      "label": "ML: retrain model and show metrics",
+      "type": "shell",
+      "command": "python generate_data.py && python model.py",
+      "linux": { "command": "python3 generate_data.py && python3 model.py" },
+      "osx": { "command": "python3 generate_data.py && python3 model.py" },
+      "options": { "cwd": "${workspaceFolder}/ml-service" },
+      "problemMatcher": []
+    }
+  ]
+}
